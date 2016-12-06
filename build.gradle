@@ -1,0 +1,40 @@
+
+apply plugin: 'eclipse'
+apply plugin: 'java'
+
+eclipse.classpath.downloadJavadoc = true
+
+repositories {
+    mavenCentral()
+}
+
+dependencies{
+	testCompile		(group: 'org.testng', 			name: 'testng', 		version: '6.9.10'	)
+	testCompile 	(group: 'org.mockito',			name: 'mockito-core',	version: '1.10.19'	)
+}
+
+test{
+	useTestNG()
+}
+
+configurations{
+	antlrDep
+	antlrworksDep
+}
+
+dependencies{
+	antlrDep(group:'org.antlr', name: 'antlr-complete', version:'3.5.2')
+	antlrworksDep(group:'org.antlr', name: 'antlrworks', version:'1.5.2')
+}
+
+tas runAntlr(type: JavaExec){
+	classpath configurations.antlrDep
+	main = 'org.antlr.Tool'
+	args	'-fo', 'src\\main\\java\\com\\nordea\\cmit\\screenCobolFinder',
+			'src\\main\\java\\com\\nordea\\cmit\\screenCobolFinder\\SCParser.g',
+			'src\\main\\java\\com\\nordea\\cmit\\screenCobolFinder\\SCLexer.g'
+}
+compileJava.dependsOn runAntlr
+
+
+
