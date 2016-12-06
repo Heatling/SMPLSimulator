@@ -67,6 +67,9 @@ DOLLAR		: '$'	;
 B_SLASH		: '\\'	;
 C_MARK		: '<%>'	;
 F_MARK		: '<:>'	;
+LARROW		: '<-'	;
+RARROW		: '->'	;
+
 
 //keywords
 BREAK 		: 'break'	;
