@@ -3,49 +3,112 @@ lexer grammar SMPLLexer;
 @header{
 package dk.heatless.smplSimulator.grammar;
 }
-AND : '&';
-OR : '|';
-ASSIGN : '=';
-SEMI : ';';
-GT : '>';
-GE : '>=';
-LT : '<';
-LE : '<=';
-EQ : '==';
-NEQ : '!=';
-PLUS : '+';
-MINUS : '-';
-MUL : '*';
-DIV : '/';
-NOT : '!';
-LPAREN : '(';
-RPAREN : ')';
-LBRACE : '{';
-RBRACE : '}';
-LBRACKET : '[';
-RBRACKET : ']';
-COLON : ':';
-IF : 'if';
-ELSE : 'else';
-WHILE : 'while';
-CONTINUE : 'continue';
-BREAK : 'break';
-WRITE : 'write';
-READ : 'read';
-INT : 'int';
-VOID : 'void';
 
-COMMENT : '/*' .*? '*/' -> channel(HIDDEN);
+//Logical operators
+NOT 		: '!'	;
+AND 		: '&'	;
+OR 			: '|'	;
+XOR			: '^'	;
+NEQ			: '!='	;
+GT 			: '>'	;
+GE 			: '>='	;
+LT 			: '<'	;
+LE 			: '<='	;
+EQ 			: '=='	;
+
+//Bitwise operators
+R_SHIFT		: '>>'	;
+L_SHIFT		: '<<'	;
+BIT_AND		: '&&'	;
+BIT_OR		: '||'	;
+BIT_XOR		: '^^'	;
+BIT_NOT		: '!!'	;
+
+//Arithmetic operators
+PLUS 		: '+'	;
+MINUS 		: '-'	;
+MUL 		: '*'	;
+DIV 		: '/'	;
+MOD			: '%'	;
+INC			: '++'	;
+DEC			: '--'	;
+
+//Assignments
+ASSIGN 		: '='	;
+ADD_ASSIGN	: '+='	;
+SUB_ASSIGN	: '-='	;
+MUL_ASSIGN	: '*='	;
+DIV_ASSIGN	: '/='	;
+MOD_ASSIGN	: '%='	;
+AND_ASSIGN	: '&='	;
+OR_ASSIGN	: '|='	;
+XOR_ASSIGN	: '^='	;
+
+//Groups
+LPAREN 		: '('	;
+RPAREN 		: ')'	;
+LBRACE 		: '{'	;
+RBRACE 		: '}'	;
+LBRACKET 	: '['	;
+RBRACKET 	: ']'	;
+LANGLE		: '<|'	;
+RANGLE		: '|>'	;
+
+//Misc
+SEMI 		: ';'	;
+COMMA		: ','	;
+DOT			: '.'	;
+COLON 		: ':'	;
+POUND		: '#'	;
+APPR		: '~'	;
+QUEST		: '?'	;
+AT			: '@'	;
+DOLLAR		: '$'	;
+B_SLASH		: '\\'	;
+C_MARK		: '<%>'	;
+F_MARK		: '<:>'	;
+
+//keywords
+BREAK 		: 'break'	;
+CASE		: 'case'	;
+CHAR		: 'char'	;
+CONTINUE 	: 'continue';
+DEFAULT		: 'default'	;
+DO			: 'do'		;
+ELSE		: 'else'	;
+ENUM		: 'enum'	;	
+FINAL		: 'final'	;
+FLOAT		: 'float'	;
+FOR			: 'for'		;
+GOTO		: 'goto'	;
+IF 			: 'if'		;
+INT 		: 'int'		;
+PUBLIC		: 'public'	;
+PRIVATE		: 'private'	;
+RETURN		: 'return'	;
+SWITCH		: 'switch'	;
+TYPE		: 'type'	;
+UNION		: 'union'	;
+VOID 		: 'void'	;
+VOLATILE	: 'volatile';
+WHILE 		: 'while'	;
      
+//Numbers
+INTEGER : ('0'..'9' '0'..'9'*);
 
-INTEGER : ('0' | '1'..'9' '0'..'9'*);
-
+//Characters
 IDENTIFIER : LETTER (LETTER|'0'..'9')* ;
+CHAR_LIT	: '\'' CHARACTER '\'';
+STRING_LIT	: '"' CHARACTER* '"';
 
 fragment
 LETTER : 'A'..'Z'
        | 'a'..'z'
        | '_'
        ;
+fragment
+CHARACTER	: (LETTER | ' ' | '\\'.);
 
+//Ignored
 WS : (' '|'\r'|'\t'|'\u000C'|'\n') -> skip ;
+COMMENT : '<:' .*? ':>' -> channel(HIDDEN);
