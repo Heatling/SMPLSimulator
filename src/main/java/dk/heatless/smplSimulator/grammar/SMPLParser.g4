@@ -131,13 +131,14 @@ declaration
 	:	data_type declaration_assignment_list SEMI
 	;
 
-declaration_assignment
-	:	IDENTIFIER ASSIGN expression
+declaration_initialization
+	:	IDENTIFIER 
+		(ASSIGN expression)?
 	;
 
 declaration_assignment_list
-	:	declaration_assignment
-	|	declaration_assignment (COMMA declaration_assignment) COMMA?
+	:	declaration_initialization
+	|	declaration_initialization (COMMA declaration_initialization) COMMA?
 	;
 	
 
