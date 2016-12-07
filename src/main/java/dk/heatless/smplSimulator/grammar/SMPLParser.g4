@@ -137,19 +137,30 @@ declaration_initialization
 	;
 
 declaration_assignment_list
-	:	declaration_initialization
-	|	declaration_initialization (COMMA declaration_initialization) COMMA?
+	:	declaration_initialization (COMMA declaration_initialization)* COMMA?
+	;
+
+uninitialized_declaration
+	:	data_type IDENTIFIER
 	;
 	
+uninitialized_declaration_list
+	:	uninitialized_declaration (COMMA uninitialized_declaration)* COMMA?
+	;
+	
+//Data types	
+tuple_data_type
+	:	LANGLE data_type_list RANGLE
+	|	LANGLE uninitialized_declaration_list RANGLE
+	;
 
-
-//Data types
 basic_data_type
 	:	INT
 	|	VOID
 	|	FLOAT
 	|	STRING
 	|	CHAR
+	|	tuple_data_type 
 	|	LPAREN data_type RPAREN
 	;
 
@@ -162,6 +173,10 @@ data_type
 	:	array_data_type
 	|	qualifier data_type
 	|	AT data_type
+	;
+
+data_type_list
+	:	data_type (COMMA data_type)* COMMA?
 	;
 
 qualifier
