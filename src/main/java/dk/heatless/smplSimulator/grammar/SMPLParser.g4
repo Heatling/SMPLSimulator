@@ -61,21 +61,25 @@ assignment_operator
 	;
 
 //Expressions lower expression types have higher precedence
+tuple_expression
+	:	LANGLE expression_list RANGLE
+	;
 
 basic_expression
 	:	IDENTIFIER
 	|	INTEGER
 	|	CHAR_LIT
 	|	STRING_LIT
-	|	data_type LBRACE expression_list RBRACE
+	|	tuple_expression
+	|	data_type LBRACE expression_list? RBRACE
 	|	LPAREN expression RPAREN
 	;
 	
 primary_postfix_expression
 	:	basic_expression
 	|	primary_postfix_expression 
-		(	LPAREN expression_list RPAREN
-		|	LBRACKET expression RBRACKET
+		(	LPAREN expression_list? RPAREN	//Function call
+		|	LBRACKET expression RBRACKET	//array index
 		)
 	;
 	
@@ -122,8 +126,7 @@ expression
 	;
 
 expression_list
-	:	
-	|	expression (COMMA expression)* COMMA?
+	:	expression (COMMA expression)* COMMA?
 	;
 	
 //Declarations
