@@ -139,9 +139,6 @@ expression_list
 	;
 	
 //Declarations
-declaration_statement
-	:	 data_type declaration_assignment_list SEMI
-	;
 
 declaration_assignment
 	:	IDENTIFIER (ASSIGN expression)?
@@ -206,6 +203,85 @@ qualifier
 	|	VOLATILE
 	;
 	
+//Statements
+expression_statement
+	:	expression SEMI
+	;
+	
+declaration_statement
+	:	 data_type declaration_assignment_list SEMI
+	;
+	
+alternative_statement
+	:	ELSE block_statement
+	;
+
+if_statement
+	:	IF expression block_statement 
+			(	alternative_statement	//Final else	
+			|	ELSE if_statement		//else if
+			)?
+	;
+	
+while_statement
+	:	WHILE expression block_statement
+		alternative_statement?
+	|	DO block_statement WHILE expression_statement
+	;
+	
+for_arguments
+	:	(	expression_statement						//Normal for
+		|	declaration_statement
+		) 
+		expression_statement 
+		expression?
+	|	uninitialized_declaration COLON expression		//for each
+	;
+
+for_statement
+	:	FOR 
+		(	LPAREN for_arguments RPAREN
+		|	for_arguments
+		)
+		block_statement
+		alternative_statement?
+	;
+
+iteration_statement
+	:	(IDENTIFIER COLON)?
+		(	for_statement
+		|	while_statement
+		)
+	;
+	
+jump_statement
+	:	(	(	CONTINUE
+			|	BREAK	
+			)
+			IDENTIFIER?
+		|	RETURN
+			expression
+		)
+		SEMI
+	;	
+	
+block_statement
+	:	LBRACE statement_list RBRACE
+	;
+	
+statement
+	:	expression_statement
+	|	declaration_statement
+	|	if_statement
+	|	iteration_statement
+	|	jump_statement
+	|	block_statement
+	;
+	
+statement_list
+	:	
+	|	statement statement_list 
+	;
 //Functions
 
 identifier_list
