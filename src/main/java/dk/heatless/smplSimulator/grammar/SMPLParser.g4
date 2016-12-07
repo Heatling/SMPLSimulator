@@ -217,10 +217,17 @@ alternative_statement
 	;
 
 if_statement
-	:	IF expression block_statement 
+	:	IF expression block_statement 	//Normal if
 			(	alternative_statement	//Final else	
 			|	ELSE if_statement		//else if
 			)?
+	|	IF	expression COLON
+		if_case+
+		alternative_statement?
+	;
+	
+if_case
+	:	expression block_statement
 	;
 	
 while_statement
