@@ -117,16 +117,19 @@ constant_expression
 	;
 	
 function_expression
-	:	constant_expression
-	|	(	LPAREN uninitialized_declaration_list RPAREN
+	:	(	LPAREN uninitialized_declaration_list RPAREN
 		|	uninitialized_declaration_list
 		)
 		RARROW 
-		function_expression
+		(	function_expression
+		|	constant_expression
+		|	block_statement
+		)
 	;
 	
 assignment_expression
 	:	function_expression
+	|	constant_expression
 	|	secondary_postfix_expression assignment_operator assignment_expression
 	;
 		
