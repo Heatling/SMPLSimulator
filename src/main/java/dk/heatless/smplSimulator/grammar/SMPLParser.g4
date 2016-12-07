@@ -130,17 +130,16 @@ expression_list
 	;
 	
 //Declarations
-declaration
-	:	data_type declaration_assignment_list SEMI
+declaration_statement
+	:	 data_type declaration_assignment_list SEMI
 	;
 
-declaration_initialization
-	:	IDENTIFIER 
-		(ASSIGN expression)?
+declaration_assignment
+	:	IDENTIFIER (ASSIGN expression)?
 	;
 
 declaration_assignment_list
-	:	declaration_initialization (COMMA declaration_initialization)* COMMA?
+	:	declaration_assignment (COMMA declaration_assignment)* COMMA?
 	;
 
 uninitialized_declaration
