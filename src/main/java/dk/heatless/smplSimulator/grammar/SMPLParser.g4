@@ -60,7 +60,7 @@ assignment_operator
 	|	XOR_ASSIGN
 	;
 
-//Expressions
+//Expressions lower expression types have higher precedence
 
 basic_expression
 	:	IDENTIFIER
@@ -126,16 +126,69 @@ expression_list
 	|	expression (COMMA expression)* COMMA?
 	;
 	
-	
-data_type
-	:	INT
-	|	VOID
+//Declarations
+declaration
+	:	data_type declaration_assignment_list SEMI
+	;
+
+declaration_assignment
+	:	IDENTIFIER ASSIGN expression
+	;
+
+declaration_assignment_list
+	:	declaration_assignment
+	|	declaration_assignment (COMMA declaration_assignment) COMMA?
 	;
 	
+
+
+//Data types
+basic_data_type
+	:	INT
+	|	VOID
+	|	FLOAT
+	|	STRING
+	|	CHAR
+	|	LPAREN data_type RPAREN
+	;
+
+array_data_type
+	:	basic_data_type 
+		(LBRACKET expression? RBRACKET)?	//Array
+	;
+
+data_type
+	:	array_data_type
+	|	qualifier data_type
+	|	AT data_type
+	;
+
+qualifier
+	:	FINAL
+	|	VOLATILE
+	;
+
+
 	
-	
-	
-	
+//Functions
+parameter_type
+	:	data_type
+	;
+parameter_type_list
+	:
+	|	parameter_type (COMMA parameter_type)* COMMA?
+	;	
+identifier_list
+	:
+	|	IDENTIFIER (COMMA IDENTIFIER)* COMMA?
+	;
+
+//Global scope
+modifier
+	:	
+	|	PUBLIC
+	|	PRIVATE
+	;
 	
 	
 	

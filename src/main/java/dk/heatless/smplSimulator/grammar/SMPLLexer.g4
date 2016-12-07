@@ -91,6 +91,7 @@ PRIVATE		: 'private'	;
 RETURN		: 'return'	;
 SWITCH		: 'switch'	;
 TYPE		: 'type'	;
+STRING		: 'string'	;
 UNION		: 'union'	;
 VOID 		: 'void'	;
 VOLATILE	: 'volatile';
