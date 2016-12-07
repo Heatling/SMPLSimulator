@@ -230,6 +230,17 @@ if_case
 	:	expression block_statement
 	;
 	
+switch_statement
+	: SWITCH expression LBRACE switch_case+ RBRACE
+	;
+	
+switch_case
+	:	(	expression 
+		|	DEFAULT	
+		)
+		COLON statement_list
+	;
+	
 while_statement
 	:	WHILE expression block_statement
 		alternative_statement?
