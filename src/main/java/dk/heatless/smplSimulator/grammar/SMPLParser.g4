@@ -156,6 +156,12 @@ tuple_data_type
 	|	LANGLE uninitialized_declaration_list RANGLE
 	;
 
+function_data_type
+	:	qualified_data_type
+		RARROW
+		data_type
+	;
+
 basic_data_type
 	:	INT
 	|	VOID
@@ -163,7 +169,7 @@ basic_data_type
 	|	STRING
 	|	CHAR
 	|	tuple_data_type 
-	|	LPAREN data_type RPAREN
+	|	LPAREN data_type_list RPAREN
 	;
 
 array_data_type
@@ -171,10 +177,15 @@ array_data_type
 		(LBRACKET expression? RBRACKET)?	//Array
 	;
 
-data_type
+qualified_data_type
 	:	array_data_type
 	|	qualifier data_type
 	|	AT data_type
+	;
+
+data_type
+	:	qualified_data_type
+	|	function_data_type
 	;
 
 data_type_list
