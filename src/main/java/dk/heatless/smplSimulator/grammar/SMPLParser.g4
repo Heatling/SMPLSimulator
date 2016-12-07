@@ -116,8 +116,17 @@ constant_expression
 		(QUEST expression COLON constant_expression)?
 	;
 	
-assignment_expression
+function_expression
 	:	constant_expression
+	|	(	LPAREN uninitialized_declaration_list RPAREN
+		|	uninitialized_declaration_list
+		)
+		RARROW 
+		function_expression
+	;
+	
+assignment_expression
+	:	function_expression
 	|	secondary_postfix_expression assignment_operator assignment_expression
 	;
 		
@@ -198,16 +207,9 @@ qualifier
 	;
 	
 //Functions
-parameter_type
-	:	data_type
-	;
-parameter_type_list
-	:
-	|	parameter_type (COMMA parameter_type)* COMMA?
-	;	
+
 identifier_list
-	:
-	|	IDENTIFIER (COMMA IDENTIFIER)* COMMA?
+	:	IDENTIFIER (COMMA IDENTIFIER)* COMMA?
 	;
 
 //Global scope
