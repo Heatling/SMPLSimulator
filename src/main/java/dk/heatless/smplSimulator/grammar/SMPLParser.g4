@@ -185,8 +185,6 @@ qualifier
 	:	FINAL
 	|	VOLATILE
 	;
-
-
 	
 //Functions
 parameter_type
@@ -208,7 +206,13 @@ modifier
 	|	PRIVATE
 	;
 	
+unit_field
+	:	modifier declaration_statement
+	;
 	
+unit_start
+	:	unit_field*
+	;
 	
 	
 	
