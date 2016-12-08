@@ -248,6 +248,11 @@ switch_case
 		COLON statement_list
 	;
 	
+selection_statement
+	:	if_statement
+	|	switch_statement
+	;
+	
 while_statement
 	:	WHILE expression block_statement
 		alternative_statement?
@@ -297,7 +302,7 @@ block_statement
 statement
 	:	expression_statement
 	|	declaration_statement
-	|	if_statement
+	|	selection_statement
 	|	iteration_statement
 	|	jump_statement
 	|	block_statement

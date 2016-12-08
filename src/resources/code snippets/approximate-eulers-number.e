@@ -1,6 +1,6 @@
 public ((@string)[] args) -> int main{
 	int k = (string) <- args[0];
-	return approximate_e(k);
+	return (int) <- approximate_e(k);
 };
 
 (int k) -> float approximate_e{
