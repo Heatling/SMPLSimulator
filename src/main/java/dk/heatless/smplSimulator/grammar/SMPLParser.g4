@@ -8,7 +8,7 @@ options{
 package dk.heatless.smplSimulator.grammar;
 }
 
-//Operator classes
+//------------------------------------Operator classes
 
 prefix_operator
 	:	NOT
@@ -60,7 +60,65 @@ assignment_operator
 	|	XOR_ASSIGN
 	;
 
-//Expressions lower expression types have higher precedence
+//--------------------------------------------Data types	
+tuple_data_type
+	:	LANGLE data_type_list RANGLE
+	;
+
+basic_data_type
+	:	INT
+	|	VOID
+	|	FLOAT
+	|	STRING
+	|	CHAR
+	|	tuple_data_type 
+	|	LPAREN data_type RPAREN
+	|	basic_data_type IDENTIFIER
+	;
+	
+array_data_type
+	:	basic_data_type 
+		(LBRACKET expression? RBRACKET)?	//Array
+	;
+
+qualified_data_type
+	:	array_data_type
+	|	qualifier data_type
+	|	AT data_type
+	;
+
+qualified_data_type_list
+	:	qualified_data_type (COMMA qualified_data_type)* COMMA?
+	;
+
+qualified_data_type_list_par
+	:	LPAREN qualified_data_type_list RPAREN
+	|	qualified_data_type_list
+	;
+	
+data_type
+	:	qualified_data_type_list_par		
+		(	RARROW				//function
+			data_type
+		)?					
+	;
+
+data_type_list
+	:	data_type (COMMA data_type)* COMMA?
+	;
+
+data_type_list_par
+	:	LPAREN data_type_list RPAREN
+	|	data_type_list
+	;
+
+qualifier
+	:	FINAL
+	|	VOLATILE
+	;
+	
+
+//----------------------Expressions lower expression types have higher precedence
 tuple_expression
 	:	LANGLE expression_list RANGLE
 	;
@@ -117,9 +175,7 @@ constant_expression
 	;
 	
 function_expression
-	:	(	LPAREN uninitialized_declaration_list RPAREN
-		|	uninitialized_declaration_list
-		)
+	:	data_type_list_par
 		RARROW 
 		(	function_expression
 		|	constant_expression
@@ -141,78 +197,27 @@ expression_list
 	:	expression (COMMA expression)* COMMA?
 	;
 	
-//Declarations
+//--------------------------------------------Declarations
 
 declaration_assignment
-	:	IDENTIFIER (ASSIGN expression)?
+	:	IDENTIFIER 
+		(	(ASSIGN expression)?		//Normal assignment
+		|	block_statement				//Quick function assignment
+		)
+		
 	;
 
 declaration_assignment_list
 	:	declaration_assignment (COMMA declaration_assignment)* COMMA?
 	;
 
-uninitialized_declaration
-	:	data_type IDENTIFIER
-	;
-	
-uninitialized_declaration_list
-	:	uninitialized_declaration (COMMA uninitialized_declaration)* COMMA?
-	;
-	
-//Data types	
-tuple_data_type
-	:	LANGLE data_type_list RANGLE
-	|	LANGLE uninitialized_declaration_list RANGLE
-	;
-
-function_data_type
-	:	qualified_data_type
-		RARROW
-		data_type
-	;
-
-basic_data_type
-	:	INT
-	|	VOID
-	|	FLOAT
-	|	STRING
-	|	CHAR
-	|	tuple_data_type 
-	|	LPAREN data_type_list RPAREN
-	;
-
-array_data_type
-	:	basic_data_type 
-		(LBRACKET expression? RBRACKET)?	//Array
-	;
-
-qualified_data_type
-	:	array_data_type
-	|	qualifier data_type
-	|	AT data_type
-	;
-
-data_type
-	:	qualified_data_type
-	|	function_data_type
-	;
-
-data_type_list
-	:	data_type (COMMA data_type)* COMMA?
-	;
-
-qualifier
-	:	FINAL
-	|	VOLATILE
-	;
-	
-//Statements
+//--------------------------------------------Statements
 expression_statement
 	:	expression SEMI
 	;
 	
 declaration_statement
-	:	 data_type declaration_assignment_list SEMI
+	:	data_type declaration_assignment_list SEMI
 	;
 	
 alternative_statement
@@ -256,7 +261,7 @@ for_arguments
 		) 
 		expression_statement 
 		expression?
-	|	uninitialized_declaration COLON expression		//for each
+	|	data_type COLON expression		//for each
 	;
 
 for_statement
@@ -289,7 +294,7 @@ jump_statement
 block_statement
 	:	LBRACE statement_list RBRACE
 	;
-	
+
 statement
 	:	expression_statement
 	|	declaration_statement
@@ -303,13 +308,9 @@ statement_list
 	:	
 	|	statement statement_list 
 	;
-//Functions
 
-identifier_list
-	:	IDENTIFIER (COMMA IDENTIFIER)* COMMA?
-	;
 
-//Global scope
+//---------------------------------------------Global scope
 modifier
 	:	
 	|	PUBLIC
