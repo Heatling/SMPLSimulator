@@ -72,7 +72,7 @@ basic_data_type
 	|	STRING
 	|	CHAR
 	|	tuple_data_type 
-	|	LPAREN data_type RPAREN
+	|	LPAREN array_data_type RPAREN
 	;
 
 qualified_data_type
@@ -82,10 +82,11 @@ qualified_data_type
 		)
 		qualified_data_type
 	;
-
+                                                                                                   
 array_data_type
 	:	qualified_data_type 
-		(LBRACKET expression? RBRACKET)?	//Array
+	|	array_data_type
+		(LBRACKET expression? RBRACKET)	//Array
 	;
 
 identified_data_type
@@ -97,7 +98,9 @@ identified_data_type_list
 	;
 	
 data_type
-	:	identified_data_type_list		
+	:	(	LPAREN identified_data_type_list RPAREN
+		|	identified_data_type
+		)
 		(	RARROW				//function
 			data_type
 		)?					
