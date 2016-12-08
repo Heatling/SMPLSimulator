@@ -98,7 +98,14 @@ VOLATILE	: 'volatile';
 WHILE 		: 'while'	;
      
 //Numbers
-INTEGER : ('0'..'9' '0'..'9'*);
+fragment
+DIGIT 		: '0'..'9'	;
+fragment
+DIGITS		: DIGIT+	;	
+INTEGER 	: DIGITS	;
+FLOAT_LIT	: DIGITS 
+			  '.' DIGITS;
+
 
 //Characters
 IDENTIFIER : LETTER (LETTER|'0'..'9')* ;

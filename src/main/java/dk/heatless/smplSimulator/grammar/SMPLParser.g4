@@ -73,31 +73,31 @@ basic_data_type
 	|	CHAR
 	|	tuple_data_type 
 	|	LPAREN data_type RPAREN
-	|	basic_data_type IDENTIFIER
 	;
-	
+		
 array_data_type
 	:	basic_data_type 
 		(LBRACKET expression? RBRACKET)?	//Array
 	;
 
+identified_basic_data_type
+	:	array_data_type IDENTIFIER?
+	;
+	
 qualified_data_type
-	:	array_data_type
-	|	qualifier data_type
-	|	AT data_type
+	:	identified_basic_data_type 
+	|	(	qualifier
+		|	AT 
+		)
+		qualified_data_type
 	;
 
 qualified_data_type_list
 	:	qualified_data_type (COMMA qualified_data_type)* COMMA?
 	;
-
-qualified_data_type_list_par
-	:	LPAREN qualified_data_type_list RPAREN
-	|	qualified_data_type_list
-	;
 	
 data_type
-	:	qualified_data_type_list_par		
+	:	qualified_data_type_list		
 		(	RARROW				//function
 			data_type
 		)?					
@@ -126,6 +126,7 @@ tuple_expression
 basic_expression
 	:	IDENTIFIER
 	|	INTEGER
+	|	FLOAT_LIT
 	|	CHAR_LIT
 	|	STRING_LIT
 	|	tuple_expression
@@ -170,8 +171,9 @@ logical_expression
 	
 constant_expression
 	:	logical_expression
-		//Can also be a conditional
-		(QUEST expression COLON constant_expression)?
+		
+		(	QUEST expression COLON constant_expression	//conditional
+		)?
 	;
 	
 function_expression
@@ -200,11 +202,8 @@ expression_list
 //--------------------------------------------Declarations
 
 declaration_assignment
-	:	IDENTIFIER 
-		(	(ASSIGN expression)?		//Normal assignment
-		|	block_statement				//Quick function assignment
-		)
-		
+	:	(ASSIGN expression)?		//Normal assignment
+	|	block_statement				//Quick function assignment		
 	;
 
 declaration_assignment_list
