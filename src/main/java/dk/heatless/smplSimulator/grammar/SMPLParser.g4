@@ -74,30 +74,30 @@ basic_data_type
 	|	tuple_data_type 
 	|	LPAREN data_type RPAREN
 	;
-		
-array_data_type
-	:	basic_data_type 
-		(LBRACKET expression? RBRACKET)?	//Array
-	;
 
-identified_basic_data_type
-	:	array_data_type IDENTIFIER?
-	;
-	
 qualified_data_type
-	:	identified_basic_data_type 
+	:	basic_data_type 
 	|	(	qualifier
 		|	AT 
 		)
 		qualified_data_type
 	;
 
-qualified_data_type_list
-	:	qualified_data_type (COMMA qualified_data_type)* COMMA?
+array_data_type
+	:	qualified_data_type 
+		(LBRACKET expression? RBRACKET)?	//Array
+	;
+
+identified_data_type
+	:	array_data_type IDENTIFIER?
+	;
+
+identified_data_type_list
+	:	identified_data_type (COMMA identified_data_type)* COMMA?
 	;
 	
 data_type
-	:	qualified_data_type_list		
+	:	identified_data_type_list		
 		(	RARROW				//function
 			data_type
 		)?					
@@ -133,17 +133,9 @@ basic_expression
 	|	data_type LBRACE expression_list? RBRACE
 	|	LPAREN expression RPAREN
 	;
-	
-primary_postfix_expression
-	:	basic_expression
-	|	primary_postfix_expression 
-		(	LPAREN expression_list? RPAREN	//Function call
-		|	LBRACKET expression RBRACKET	//array index
-		)
-	;
-	
+
 prefix_expression
-	:	primary_postfix_expression
+	:	basic_expression
 	|	(	prefix_operator					//INC or DEC
 		|	LPAREN data_type RPAREN			//Cast
 		|	LPAREN data_type RPAREN LARROW	//Conversion
@@ -153,15 +145,19 @@ prefix_expression
 		prefix_expression
 	;
 	
-secondary_postfix_expression
+postfix_expression
 	:	prefix_expression
-	|	secondary_postfix_expression post_operator 
-	|	secondary_postfix_expression DOT IDENTIFIER
+	|	postfix_expression 
+		(	post_operator 
+		|	DOT IDENTIFIER					//Member access
+		|	LPAREN expression_list? RPAREN	//Function call
+		|	LBRACKET expression RBRACKET	//array index
+		)
 	;
 	
 arithmetic_expression
-	:	secondary_postfix_expression
-	|	arithmetic_expression arithmetic_binary_operator secondary_postfix_expression
+	:	postfix_expression
+	|	arithmetic_expression arithmetic_binary_operator postfix_expression
 	;
 	
 logical_expression
@@ -188,7 +184,7 @@ function_expression
 assignment_expression
 	:	function_expression
 	|	constant_expression
-	|	secondary_postfix_expression assignment_operator assignment_expression
+	|	postfix_expression assignment_operator assignment_expression
 	;
 		
 expression
