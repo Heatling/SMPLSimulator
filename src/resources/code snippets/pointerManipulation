@@ -1,4 +1,4 @@
-public @string[] args -> int main{
+public void main{
 	<:'y' (a reference to an integer) now refers to a new value '2':> 
 	int y = 2;
 	<:Create a pointer (to an integer) refered as 'x', that points to 'y':>

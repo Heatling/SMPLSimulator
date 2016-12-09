@@ -66,67 +66,6 @@ assignment_operator
 	|	XOR_ASSIGN
 	;
 
-//--------------------------------------------Data types	
-tuple_data_type
-	:	LANGLE data_type_list RANGLE
-	;
-
-basic_data_type
-	:	INT
-	|	VOID
-	|	FLOAT
-	|	STRING
-	|	CHAR
-	|	tuple_data_type 
-	|	LPAREN array_data_type RPAREN
-	;
-
-qualified_data_type
-	:	basic_data_type 
-	|	(	qualifier
-		|	AT 
-		)
-		qualified_data_type
-	;
-                                                                                                   
-array_data_type
-	:	qualified_data_type 
-	|	array_data_type
-		(LBRACKET expression? RBRACKET)	//Array
-	;
-
-identified_data_type
-	:	array_data_type IDENTIFIER?
-	;
-
-identified_data_type_list
-	:	identified_data_type (COMMA identified_data_type)* COMMA?
-	;
-	
-data_type
-	:	(	LPAREN identified_data_type_list RPAREN
-		|	identified_data_type
-		)
-		(	RARROW				//function
-			data_type
-		)?					
-	;
-
-data_type_list
-	:	data_type (COMMA data_type)* COMMA?
-	;
-
-data_type_list_par
-	:	LPAREN data_type_list RPAREN
-	|	data_type_list
-	;
-
-qualifier
-	:	FINAL
-	|	VOLATILE
-	;
-	
-
 //----------------------Expressions lower expression types have higher precedence
 tuple_expression
 	:	LANGLE expression_list RANGLE
@@ -143,19 +82,23 @@ basic_expression
 	|	LPAREN expression RPAREN
 	;
 
-prefix_expression
+prefix_operator_expression
 	:	basic_expression
-	|	(	prefix_operator					//INC or DEC
-		|	LPAREN data_type RPAREN			//Cast
-		|	LPAREN data_type RPAREN LARROW	//Conversion
-		|	AT								//pointer dereference
+	|	prefix_operator	prefix_operator_expression
+	;
+
+prefix_mutation_expression
+	:	prefix_operator_expression
+	|	(	AT								//pointer dereference
 		|	DOLLAR							//address-of
+		|	data_type DOT					//cast
+		|	data_type LARROW				//convert
 		)
-		prefix_expression
+		prefix_mutation_expression
 	;
 	
 postfix_expression
-	:	prefix_expression
+	:	prefix_mutation_expression
 	|	postfix_expression 
 		(	post_operator 
 		|	DOT IDENTIFIER					//Member access
@@ -218,7 +161,68 @@ expression
 expression_list
 	:	expression (COMMA expression)* COMMA?
 	;
+
+//--------------------------------------------Data types	
+tuple_data_type
+	:	LANGLE data_type_list RANGLE
+	;
+
+basic_data_type
+	:	INT
+	|	VOID
+	|	FLOAT
+	|	STRING
+	|	CHAR
+	|	tuple_data_type 
+	|	LPAREN identified_array_data_type RPAREN
+	;
+
+qualified_data_type
+	:	basic_data_type 
+	|	(	qualifier
+		|	AT 
+		|	AT LPAREN identified_array_data_type RPAREN IDENTIFIER
+		)
+		qualified_data_type
+	;
+                                                                                                   
+array_data_type
+	:	qualified_data_type 
+	|	array_data_type
+		(LBRACKET expression? RBRACKET)	//Array
+	;
+
+identified_array_data_type
+	:	array_data_type IDENTIFIER?
+	;
+
+identified_data_type_list
+	:	identified_array_data_type (COMMA identified_array_data_type)* COMMA?
+	;
 	
+data_type
+	:	(	LPAREN identified_data_type_list RPAREN
+		|	identified_array_data_type
+		)
+		(	RARROW				//function
+			data_type
+		)?					
+	;
+
+data_type_list
+	:	data_type (COMMA data_type)* COMMA?
+	;
+
+data_type_list_par
+	:	LPAREN data_type_list RPAREN
+	|	data_type_list
+	;
+
+qualifier
+	:	FINAL
+	|	VOLATILE
+	;
+
 //--------------------------------------------Declarations
 
 declaration_assignment
@@ -332,7 +336,6 @@ statement_list
 	:	
 	|	statement statement_list 
 	;
-
 
 //---------------------------------------------Global scope
 modifier
