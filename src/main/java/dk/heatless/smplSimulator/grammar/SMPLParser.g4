@@ -22,31 +22,37 @@ post_operator
 	:	INC
 	|	DEC
 	;
-	
-logical_binary_operator
-	:	AND					
-	|	OR					
-	|	XOR			
-	|	NEQ			
-	|	EQ			
-	|	GT				
-	|	GE				
-	|	LT			
-	|	LE
-	;
-	
+
 arithmetic_binary_operator
 	:	PLUS
 	| 	MINUS
 	|	MUL
 	|	DIV
 	|	MOD
-	|	BIT_XOR
+	;
+	
+arithmetic_logic_operator
+	:	BIT_XOR
 	|	BIT_OR
 	|	BIT_AND
 	|	L_SHIFT	
 	|	R_SHIFT	
 	;
+
+relational_binary_operator
+	:	NEQ			
+	|	EQ			
+	|	GT				
+	|	GE				
+	|	LT			
+	|	LE
+	;
+
+logical_binary_operator
+	:	AND					
+	|	OR					
+	|	XOR
+	;	
 
 assignment_operator
 	:	ASSIGN
@@ -162,10 +168,20 @@ arithmetic_expression
 	:	postfix_expression
 	|	arithmetic_expression arithmetic_binary_operator postfix_expression
 	;
-	
-logical_expression
+
+arithmetic_logic_expression
 	:	arithmetic_expression
-	|	logical_expression logical_binary_operator arithmetic_expression
+	|	arithmetic_logic_expression arithmetic_logic_operator arithmetic_expression
+	;
+
+relational_expression
+	:	arithmetic_logic_expression
+	|	relational_expression relational_binary_operator arithmetic_logic_expression
+	;
+
+logical_expression
+	:	relational_expression
+	|	logical_expression logical_binary_operator relational_expression
 	;
 	
 constant_expression
@@ -183,7 +199,12 @@ function_expression
 		|	block_statement
 		)
 	;
-	
+
+identifier_list
+	:	
+	|	IDENTIFIER
+	;
+
 assignment_expression
 	:	function_expression
 	|	constant_expression
