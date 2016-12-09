@@ -93,6 +93,7 @@ SWITCH		: 'switch'	;
 TYPE		: 'type'	;
 STRING		: 'string'	;
 UNION		: 'union'	;
+USE			: 'use'		;
 VOID 		: 'void'	;
 VOLATILE	: 'volatile';
 WHILE 		: 'while'	;

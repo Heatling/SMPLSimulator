@@ -135,7 +135,9 @@ constant_expression
 	;
 	
 function_expression
-	:	data_type_list_par
+	:	(	data_type_list_par
+		|	identifier_or_pointer_identifier_list
+		)
 		RARROW 
 		(	function_expression
 		|	constant_expression
@@ -143,9 +145,13 @@ function_expression
 		)
 	;
 
-identifier_list
+identifier_or_pointer_identifier
+	:	AT? IDENTIFIER
+	;
+
+identifier_or_pointer_identifier_list
 	:	
-	|	IDENTIFIER
+	|	identifier_or_pointer_identifier (COMMA identifier_or_pointer_identifier)* COMMA?
 	;
 
 assignment_expression
