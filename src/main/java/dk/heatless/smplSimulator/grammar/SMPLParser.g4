@@ -91,6 +91,7 @@ prefix_mutation_expression
 	:	prefix_operator_expression
 	|	(	AT								//pointer dereference
 		|	DOLLAR							//address-of
+		|	POUND							//sizeof
 		|	data_type DOT					//cast
 		|	data_type LARROW				//convert
 		)

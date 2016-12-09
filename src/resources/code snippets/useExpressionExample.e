@@ -1,3 +1,5 @@
+<:Credit to www.youtube.com/user/brianwill for this functionality idea:>
+
 public int z = 0;
 
 public void main{
