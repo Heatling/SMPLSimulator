@@ -1,3 +1,5 @@
+namespace CodeSnippets.NestedIdentifiers;
+
 public void main{
 	int y = 2;
 	@int pY = @y;

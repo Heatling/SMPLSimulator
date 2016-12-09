@@ -1,3 +1,5 @@
+namespace CodeSnippets.BinaryOperatorPrecedence;
+
 public void main{
 	<:Binary operator precedence is based around the  idea
 	of arithmetics having lower precedence than logicals

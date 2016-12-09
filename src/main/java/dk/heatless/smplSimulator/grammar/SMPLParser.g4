@@ -81,9 +81,19 @@ basic_expression
 	|	data_type LBRACE expression_list? RBRACE
 	|	LPAREN expression RPAREN
 	;
-
-prefix_operator_expression
+	
+postfix_expression
 	:	basic_expression
+	|	postfix_expression 
+		(	post_operator 
+		|	DOT IDENTIFIER					//Member access
+		|	LPAREN expression_list? RPAREN	//Function call
+		|	LBRACKET expression RBRACKET	//array index
+		)
+	;
+	
+prefix_operator_expression
+	:	postfix_expression
 	|	prefix_operator	prefix_operator_expression
 	;
 
@@ -98,18 +108,8 @@ prefix_mutation_expression
 		prefix_mutation_expression
 	;
 	
-postfix_expression
-	:	prefix_mutation_expression
-	|	postfix_expression 
-		(	post_operator 
-		|	DOT IDENTIFIER					//Member access
-		|	LPAREN expression_list? RPAREN	//Function call
-		|	LBRACKET expression RBRACKET	//array index
-		)
-	;
-	
 arithmetic_expression
-	:	postfix_expression
+	:	prefix_mutation_expression
 	|	arithmetic_expression arithmetic_binary_operator postfix_expression
 	;
 
@@ -350,16 +350,32 @@ modifier
 	|	PUBLIC
 	|	PRIVATE
 	;
-	
+
+full_indentifier
+	:	IDENTIFIER (DOT IDENTIFIER)
+	;
+
 unit_field
 	:	modifier declaration_statement
 	;
 	
-unit_start
-	:	unit_field*
+unit_type_definition
+	:	TYPE data_type SEMI
 	;
 	
+import_statement
+	:	IMPORT full_indentifier (DOT MUL)? SEMI
+	;
 	
+unit_start
+	:	NAMESPACE full_indentifier SEMI 
+		import_statement*
+		(	unit_field
+		|	unit_type_definition
+		)*
+	;
+	
+
 	
 	
 	

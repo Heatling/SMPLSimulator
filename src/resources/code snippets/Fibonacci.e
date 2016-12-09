@@ -1,3 +1,5 @@
+namespace CodeSnippets.Fibonacci;
+
 public ((@string)[] args) -> int main{
 	int k = (int) <- args[0];
 	

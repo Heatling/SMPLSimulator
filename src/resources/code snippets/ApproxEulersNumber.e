@@ -1,3 +1,5 @@
+namespace CodeSnippets.ApproxEulersNumber;
+
 public ((@string)[] args) -> int main{
 	int k = (string) <- args[0];
 	return (int) <- approximate_e(k);

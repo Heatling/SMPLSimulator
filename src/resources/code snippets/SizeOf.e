@@ -1,3 +1,5 @@
+namespace CodeSnippets.SizeOf;
+
 public int main{
 	
 	<|int x, int y|> point = <|1,1|>;

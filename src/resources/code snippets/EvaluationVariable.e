@@ -1,3 +1,5 @@
+namespace CodeSnippets.EvaluationVariable;
+
 public void main{
 	int x = 2;
 	final int sqrX{

@@ -1,4 +1,5 @@
 <:Credit to www.youtube.com/user/brianwill for this functionality idea:>
+namespace CodeSnippets.UseExpression;
 
 public int z = 0;
 

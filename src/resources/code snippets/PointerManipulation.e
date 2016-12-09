@@ -1,3 +1,5 @@
+namespace CodeSnippets.PointerManipulation;
+
 public void main{
 	<:'y' (a reference to an integer) now refers to a new value '2':> 
 	int y = 2;

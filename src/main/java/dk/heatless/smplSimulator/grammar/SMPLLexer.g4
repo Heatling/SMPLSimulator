@@ -85,7 +85,9 @@ FLOAT		: 'float'	;
 FOR			: 'for'		;
 GOTO		: 'goto'	;
 IF 			: 'if'		;
+IMPORT		: 'import'	;
 INT 		: 'int'		;
+NAMESPACE	: 'namespace';
 PUBLIC		: 'public'	;
 PRIVATE		: 'private'	;
 RETURN		: 'return'	;
@@ -109,7 +111,9 @@ FLOAT_LIT	: DIGITS
 
 
 //Characters
-IDENTIFIER : LETTER (LETTER|'0'..'9')* ;
+IDENTIFIER :  NAME;
+fragment
+NAME		: LETTER (LETTER|'0'..'9')*;
 CHAR_LIT	: '\'' CHARACTER '\'';
 STRING_LIT	: '"' CHARACTER* '"';
 
@@ -122,5 +126,8 @@ fragment
 CHARACTER	: (LETTER | ' ' | '\\'.);
 
 //Ignored
-WS : (' '|'\r'|'\t'|'\u000C'|'\n') -> skip ;
+WS :  WS_F-> skip ;
+
+fragment
+WS_F	:(' '|'\r'|'\t'|'\u000C'|'\n');
 COMMENT : '<:' .*? ':>' -> channel(HIDDEN);
