@@ -88,7 +88,7 @@ postfix_expression
 		(	post_operator 
 		|	DOT IDENTIFIER					//Member access
 		|	LPAREN expression_list? RPAREN	//Function call
-		|	LBRACKET expression RBRACKET	//array index
+		|	LBRACKET expression? RBRACKET	//array index or length
 		)
 	;
 	
@@ -106,6 +106,7 @@ prefix_mutation_expression
 		|	data_type LARROW				//convert
 		)
 		prefix_mutation_expression
+	| POUND data_type
 	;
 	
 arithmetic_expression
