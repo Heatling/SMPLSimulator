@@ -76,6 +76,7 @@ BREAK 		: 'break'	;
 CASE		: 'case'	;
 CHAR		: 'char'	;
 CONTINUE 	: 'continue';
+COROUTINE	: 'coroutine';
 DEFAULT		: 'default'	;
 DO			: 'do'		;
 ELSE		: 'else'	;
@@ -99,6 +100,7 @@ USE			: 'use'		;
 VOID 		: 'void'	;
 VOLATILE	: 'volatile';
 WHILE 		: 'while'	;
+YIELD		: 'yield'	;
      
 //Numbers
 fragment

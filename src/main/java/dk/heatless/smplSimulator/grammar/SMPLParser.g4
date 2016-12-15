@@ -181,6 +181,7 @@ basic_data_type
 	|	FLOAT
 	|	STRING
 	|	CHAR
+	|	IDENTIFIER
 	|	tuple_data_type 
 	|	LPAREN identified_array_data_type RPAREN
 	;
@@ -319,6 +320,7 @@ iteration_statement
 jump_statement
 	:	(	(	CONTINUE
 			|	BREAK	
+			|	YIELD
 			)
 			IDENTIFIER?
 		|	RETURN
@@ -326,6 +328,15 @@ jump_statement
 		)
 		SEMI
 	;	
+	
+coroutine_statement
+	:	COROUTINE 
+		LBRACE 
+		(	declaration_statement
+		|	IDENTIFIER block_statement
+		)*
+		RBRACE
+	;
 	
 block_statement
 	:	LBRACE statement_list RBRACE
@@ -338,6 +349,7 @@ statement
 	|	iteration_statement
 	|	jump_statement
 	|	block_statement
+	|	coroutine_statement
 	;
 	
 statement_list
